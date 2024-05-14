@@ -16,6 +16,7 @@ const Main = () => {
   const [searchParams, setSearchParams] = useSearchParams({ page: "0" });
   const pageParam = Number(searchParams.get("page")) * 2;
   const [page, setPage] = useState(pageParam);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const savePage = (callback: number | ((prev: number) => number)) => {
@@ -34,7 +35,7 @@ const Main = () => {
   const [scrolling, setScrolling] = useState(false);
 
   const pages = [
-    <Page0 />,
+    <Page0 setPage={setPage} />,
     <Page1 />,
     <Page2 />,
     <Page3 />,
@@ -158,8 +159,11 @@ const Main = () => {
 
   return (
     <>
-      <Navbar setPage={setPage} />
-      <main className="flex-1 overflow-hidden relative" onWheel={handleWheel}>
+      <Navbar open={open} setOpen={setOpen} setPage={setPage} />
+      <main
+        className="flex-1 overflow-hidden relative isolate"
+        onWheel={handleWheel}
+      >
         {pages.map((p, i) => (
           <div
             key={i}
@@ -171,7 +175,9 @@ const Main = () => {
             {p}
           </div>
         ))}
-        <div className="absolute w-full h-full left-0 top-0 flex justify-between pointer-events-none">
+
+        {/* SIDEBARS */}
+        <div className="absolute w-full h-full left-0 top-0 flex justify-between pointer-events-none z-[-10]">
           <div
             className="w-40 h-full transition-all duration-300"
             style={{
@@ -187,7 +193,13 @@ const Main = () => {
             }}
           ></div>
         </div>
-        <div className="w-full absolute top-0 z-10 h-1 bg-black/5">
+
+        {/* PROGRESS BAR */}
+        <div
+          className={`w-full absolute z-10 h-1 bg-black/5 top-0 ${
+            open ? "max-md:top-10" : "max-md:top-0"
+          }`}
+        >
           <div
             className="bg-second h-full transition-all duration-500"
             style={{
@@ -195,6 +207,8 @@ const Main = () => {
             }}
           ></div>
         </div>
+
+        {/* BUTTON UP */}
         <button
           className="absolute top-5 left-1/2 -translate-x-1/2 px-10 bg-black/5 rounded-full transition-all duration-500"
           onClick={() => setPage((oldPage) => Math.max(oldPage - 2, 0))}
@@ -207,6 +221,8 @@ const Main = () => {
             <IconChevron />
           </div>
         </button>
+
+        {/* BUTTON DOWN */}
         <button
           className="absolute bottom-5 left-1/2 -translate-x-1/2 px-10 bg-black/5 rounded-full transition-all duration-500"
           onClick={() =>
@@ -221,8 +237,10 @@ const Main = () => {
             <IconChevron />
           </div>
         </button>
+
+        {/* DOTS */}
         <div
-          className="aspect-square absolute transition-all duration-500 pointer-events-none"
+          className="aspect-square absolute transition-all duration-500 pointer-events-none z-[-10]"
           style={styles[page / 2]}
         >
           <Spinner />

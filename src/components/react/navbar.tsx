@@ -1,54 +1,77 @@
+import IconMenu from "../icons/iconMenu";
+
 interface Props {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setPage: (callback: number | ((prev: number) => number)) => void;
 }
 
-const Navbar = ({ setPage }: Props) => {
+const Navbar = ({ open, setOpen, setPage }: Props) => {
+  const changePage = (num: number) => {
+    setPage(num);
+    setOpen(false);
+  };
+
   return (
-    <header className="h-24 flex items-center justify-between px-20">
-      <div className="h-full flex items-center gap-4">
+    <header className="h-24 flex items-center justify-between relative z-20">
+      <div className="h-full flex items-center gap-4 pl-10">
         <img
           className="h-[70%] w-auto"
           src="./images/medula-logo.png"
-          alt="logo"
+          alt="medula-logo"
         />
-        <b className="text-second">Medula</b>
+        <h1 className="text-second text-xl font-extrabold">Medula</h1>
       </div>
-      <nav>
-        <ul className="flex gap-4">
-          <li>
-            <button
-              onClick={() => setPage(0)}
-              className="bg-first text-white px-6 py-[2px] rounded-full cursor-pointer hover:opacity-80 transition-all duration-300 text-sm"
-            >
-              Inicio
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => setPage(2)}
-              className="bg-second text-white px-6 py-[2px] rounded-full cursor-pointer hover:opacity-80 transition-all duration-300 text-sm"
-            >
-              Colaboradores
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => setPage(4)}
-              className="bg-third text-white px-6 py-[2px] rounded-full cursor-pointer hover:opacity-80 transition-all duration-300 text-sm"
-            >
-              ¿Qué somos?
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => setPage(6)}
-              className="bg-fourth text-white px-6 py-[2px] rounded-full cursor-pointer hover:opacity-80 transition-all duration-300 text-sm"
-            >
-              Gráficas
-            </button>
-          </li>
-        </ul>
-      </nav>
+      <div className="pr-10 flex items-center">
+        <button onClick={() => setOpen(!open)} className="md:hidden">
+          <div className="text-second w-8 aspect-square">
+            <IconMenu open={open} />
+          </div>
+        </button>
+        <input
+          checked={open}
+          onChange={() => {}}
+          id="hamburger"
+          type="checkbox"
+          className="peer hidden"
+        />
+        <nav className="max-md:hidden max-md:absolute max-md:top-full max-md:left-0 max-md:h-10 bg-bg peer-checked:block max-md:w-full overflow-x-auto">
+          <ul className="flex gap-4 max-md:px-4">
+            <li>
+              <button
+                onClick={() => changePage(0)}
+                className="bg-first text-white px-6 py-[2px] rounded-full cursor-pointer hover:opacity-80 transition-all duration-300 text-sm text-nowrap"
+              >
+                Inicio
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => changePage(2)}
+                className="bg-second text-white px-6 py-[2px] rounded-full cursor-pointer hover:opacity-80 transition-all duration-300 text-sm text-nowrap"
+              >
+                Colaboradores
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => changePage(4)}
+                className="bg-third text-white px-6 py-[2px] rounded-full cursor-pointer hover:opacity-80 transition-all duration-300 text-sm text-nowrap"
+              >
+                ¿Qué somos?
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => changePage(6)}
+                className="bg-fourth text-white px-6 py-[2px] rounded-full cursor-pointer hover:opacity-80 transition-all duration-300 text-sm text-nowrap"
+              >
+                Gráficas
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </header>
   );
 };
