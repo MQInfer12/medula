@@ -13,14 +13,14 @@ const Page0 = ({ setPage }: Props) => {
           }}
         >
           <h2
-            className="bg-bg font-extrabold inline p-4 py-2 xl:py-4 text-3xl xl:text-5xl text-second leading-normal text-center md:text-start"
+            className="bg-bg font-extrabold inline p-4 py-2 xl:py-4 text-3xl xl:text-5xl text-second leading-normal xl:leading-normal text-center md:text-start"
             style={{
               textWrap: "balance",
             }}
           >
             Análisis profundos de la salud de los trabajadores
           </h2>
-          <p className="bg-bg w-full sm:w-3/4 px-4 py-2 leading-8 xl:text-base text-sm text-center md:text-start">
+          <p className="bg-bg w-full sm:w-3/4 px-4 py-2 text-sm text-center md:text-start text-black/65 font-bold leading-loose xl:text-base xl:leading-loose">
             ¡Bienvenido al Estudio Clínico Praxis, una ventana informativa a la
             salud de los empleados de CBN en toda Bolivia! <br /> Sumérgete en
             nuestros análisis detallados y gráficas destacadas que revelan

@@ -1,10 +1,10 @@
+import { useDataContext } from "../../context/dataContext";
 import BarGraph from "../charts/barGraph";
-import { electrocardiograma } from "../../data/counts";
 import Wing from "./wing";
 
 const Page5 = () => {
   const COLORS = ["#7768ae", "#e15554", "#e1bc29", "#3bb273", "#d64dc4"];
-  const data = electrocardiograma;
+  const { data_electrocardiograma: data } = useDataContext();
 
   return (
     <section className="h-full flex flex-col items-center justify-center gap-8">
@@ -16,7 +16,7 @@ const Page5 = () => {
       </div>
       <div className="flex flex-col gap-2">
         {Object.keys(data).map((v, i) => (
-          <div className="flex items-center gap-2">
+          <div key={i} className="flex items-center gap-2">
             <span
               className="w-8 h-2 rounded-full"
               style={{

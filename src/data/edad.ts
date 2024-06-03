@@ -13,4 +13,4 @@ export const edad: PieChartData[] = Data.reduce<PieChartData[]>((obj, v) => {
   }
   obj.sort((a, b) => Number(a.name) - Number(b.name));
   return obj;
-}, []);
+}, []).map((v) => ({ ...v, name: `${v.name} años` }));

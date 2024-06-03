@@ -1,9 +1,13 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import Page0 from "./page0";
 import Page1 from "./page1";
 import Page2 from "./page2";
 import Page3 from "./page3";
-import Spinner from "../icons/spinner";
 import IconChevron from "../icons/iconChevron";
 import Page4 from "./page4";
 import Page5 from "./page5";
@@ -11,12 +15,53 @@ import Page6 from "./page6";
 import Page7 from "./page7";
 import Navbar from "./navbar";
 import { useSearchParams } from "react-router-dom";
+import PageRender from "./pageRender";
+import { DataContextProvider } from "../../context/dataContext";
+import Dots from "../absolutes/dots";
+import Walls from "../absolutes/walls";
+
+export interface ScrollPage {
+  component: JSX.Element;
+  appear?: boolean;
+}
 
 const Main = () => {
+  const [open, setOpen] = useState(false);
+
   const [searchParams, setSearchParams] = useSearchParams({ page: "0" });
   const pageParam = Number(searchParams.get("page")) * 2;
   const [page, setPage] = useState(pageParam);
-  const [open, setOpen] = useState(false);
+  const [scrolling, setScrolling] = useState(false);
+
+  const pages: ScrollPage[] = useMemo(
+    () => [
+      {
+        component: <Page0 setPage={setPage} />,
+      },
+      {
+        component: <Page1 />,
+      },
+      {
+        component: <Page2 />,
+      },
+      {
+        component: <Page3 />,
+      },
+      {
+        component: <Page4 />,
+      },
+      {
+        component: <Page5 />,
+      },
+      {
+        component: <Page6 />,
+      },
+      {
+        component: <Page7 active={page === 14} />,
+      },
+    ],
+    [setPage, page]
+  );
 
   useEffect(() => {
     const savePage = (callback: number | ((prev: number) => number)) => {
@@ -32,167 +77,40 @@ const Main = () => {
     savePage(page);
   }, [page]);
 
-  const [scrolling, setScrolling] = useState(false);
-
-  const pages = [
-    <Page0 setPage={setPage} />,
-    <Page1 />,
-    <Page2 />,
-    <Page3 />,
-    <Page4 />,
-    <Page5 />,
-    <Page6 />,
-    <Page7 active={page === 14} />,
-  ];
-
-  const handleWheel = (event: any) => {
-    if (!scrolling) {
-      setScrolling(true);
-      if (event.deltaY > 0) {
-        // Scrolling down
-        setPage((oldPage) => Math.min(oldPage + 2, (pages.length - 1) * 2));
-      } else {
-        // Scrolling up
-        setPage((oldPage) => Math.max(oldPage - 2, 0));
+  const handleWheel = useCallback(
+    (event: any) => {
+      console.log("handling wheel");
+      if (!scrolling) {
+        setScrolling(true);
+        if (event.deltaY > 0) {
+          // Scrolling down
+          setPage((oldPage) => Math.min(oldPage + 2, (pages.length - 1) * 2));
+        } else {
+          // Scrolling up
+          setPage((oldPage) => Math.max(oldPage - 2, 0));
+        }
+        setTimeout(() => {
+          setScrolling(false);
+        }, 200); // Adjust the delay time here (in milliseconds)
       }
-      setTimeout(() => {
-        setScrolling(false);
-      }, 200); // Adjust the delay time here (in milliseconds)
-    }
-  };
+    },
+    [scrolling, setPage]
+  );
 
-  const styleWalls: CSSProperties[] = [
-    {
-      left: "0",
-      right: "0",
-    },
-    {
-      left: "0.3",
-      right: "0.3",
-    },
-    {
-      left: "0",
-      right: "0",
-    },
-    {
-      left: "0.3",
-      right: "0.3",
-    },
-    {
-      left: "0.3",
-      right: "0.3",
-    },
-    {
-      left: "0.3",
-      right: "0.3",
-    },
-    {
-      left: "0.3",
-      right: "0.3",
-    },
-    {
-      left: "0.3",
-      right: "0.3",
-    },
-  ];
-
-  const styles: CSSProperties[] = [
-    {
-      opacity: "0.2",
-      width: "800px",
-      top: "50%",
-      left: "75%",
-      transform: "translate(-50%, -50%)",
-    },
-    {
-      opacity: "0.1",
-      width: "500px",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-    },
-    {
-      opacity: "0.1",
-      width: "700px",
-      top: "50%",
-      left: "25%",
-      transform: "translate(-50%, -50%)",
-    },
-    {
-      opacity: "0.1",
-      width: "1200px",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-    },
-    {
-      opacity: "0.1",
-      width: "900px",
-      top: "50%",
-      left: "80%",
-      transform: "translate(-50%, -50%)",
-    },
-    {
-      opacity: "0.1",
-      width: "2000px",
-      top: "0%",
-      left: "20%",
-      transform: "translate(-50%, -50%)",
-    },
-    {
-      opacity: "0.1",
-      width: "1500px",
-      top: "100%",
-      left: "80%",
-      transform: "translate(-50%, -50%)",
-    },
-    {
-      opacity: "0.1",
-      width: "2200px",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-    },
-  ];
-
-  const total = (pages.length - 1) * 2;
+  const total = useMemo(() => (pages.length - 1) * 2, [pages]);
 
   return (
-    <>
+    <DataContextProvider>
       <Navbar open={open} setOpen={setOpen} setPage={setPage} />
       <main
         className="flex-1 overflow-hidden relative isolate"
         onWheel={handleWheel}
       >
         {pages.map((p, i) => (
-          <div
-            key={i}
-            className="h-full w-full transition-all duration-500"
-            style={{
-              transform: `translateY(${i * 100 - page * 100}%)`,
-            }}
-          >
-            {p}
-          </div>
+          <PageRender key={i} index={i} page={p} pageIndex={page} />
         ))}
 
-        {/* SIDEBARS */}
-        <div className="absolute w-full h-full left-0 top-0 flex justify-between pointer-events-none z-[-10]">
-          <div
-            className="w-40 h-full transition-all duration-300"
-            style={{
-              backgroundImage: "url(./images/dots.png)",
-              opacity: styleWalls[page / 2].left,
-            }}
-          ></div>
-          <div
-            className="w-40 h-full transition-all duration-300"
-            style={{
-              backgroundImage: "url(./images/dots.png)",
-              opacity: styleWalls[page / 2].right,
-            }}
-          ></div>
-        </div>
+        <Walls page={page} />
 
         {/* PROGRESS BAR */}
         <div
@@ -238,15 +156,9 @@ const Main = () => {
           </div>
         </button>
 
-        {/* DOTS */}
-        <div
-          className="aspect-square absolute transition-all duration-500 pointer-events-none z-[-10]"
-          style={styles[page / 2]}
-        >
-          <Spinner />
-        </div>
+        <Dots page={page} />
       </main>
-    </>
+    </DataContextProvider>
   );
 };
 

@@ -1,12 +1,6 @@
-import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { ApexOptions } from "apexcharts";
+import { memo } from "react";
+import ReactApexChart from "react-apexcharts";
 
 export interface CartesianType {
   name: number;
@@ -19,7 +13,7 @@ interface Props {
   bg?: "first" | "second" | "third" | "fourth";
 }
 
-const CartesianGraph = ({ data, title, bg = "first" }: Props) => {
+const CartesianGraph = memo(({ data, title, bg = "first" }: Props) => {
   let styles = "";
   switch (bg) {
     case "first":
@@ -36,38 +30,46 @@ const CartesianGraph = ({ data, title, bg = "first" }: Props) => {
       break;
   }
 
+  const options: ApexOptions = {
+    chart: {
+      toolbar: {
+        show: true,
+        tools: {
+          download: true,
+          selection: false,
+          zoom: false,
+          zoomin: false,
+          zoomout: false,
+          pan: false,
+          reset: false,
+        },
+      },
+    },
+    xaxis: {
+      categories: data.map((v) => v.name.toString()),
+    },
+    legend: {
+      show: false,
+    },
+  };
+
   return (
     <div className="flex flex-col items-center gap-2">
       <p className="font-bold text-black/70">{title}</p>
-      <div style={{ width: "320px", height: 160 }} className={styles}>
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            width={500}
-            height={300}
-            data={data}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Line
-              type="monotone"
-              dataKey="pv"
-              stroke="#8884d8"
-              activeDot={{ r: 8 }}
-            />
-            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+      <ReactApexChart
+        type="line"
+        height={160}
+        width={320}
+        options={options}
+        series={[
+          {
+            name: title,
+            data: data.map((v) => parseFloat(v.uv)),
+          },
+        ]}
+      />
     </div>
   );
-};
+});
 
 export default CartesianGraph;

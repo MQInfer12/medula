@@ -30,15 +30,15 @@ const dataTallas: PieChartData[] = [
     value: 0,
   },
   {
-    name: "150-160",
+    name: "150 - 160",
     value: 0,
   },
   {
-    name: "161-170",
+    name: "161 - 170",
     value: 0,
   },
   {
-    name: "171-180",
+    name: "171 - 180",
     value: 0,
   },
   {
@@ -53,35 +53,35 @@ const dataPesos: PieChartData[] = [
     value: 0,
   },
   {
-    name: "x < 50",
+    name: "menos de 50kg",
     value: 0,
   },
   {
-    name: "50 <= x <= 60",
+    name: "50kg - 60kg",
     value: 0,
   },
   {
-    name: "60 < x <= 70",
+    name: "60kg - 70kg",
     value: 0,
   },
   {
-    name: "70 < x <= 80",
+    name: "70kg - 80kg",
     value: 0,
   },
   {
-    name: "80 < x <= 90",
+    name: "80kg - 90kg",
     value: 0,
   },
   {
-    name: "90 < x <= 100",
+    name: "90kg - 100kg",
     value: 0,
   },
   {
-    name: "100 < x <= 110",
+    name: "100kg - 110kg",
     value: 0,
   },
   {
-    name: "110 < x <= 120",
+    name: "110kg - 120kg",
     value: 0,
   },
   {
@@ -247,7 +247,6 @@ Data.forEach((v) => {
   const temp = v.signos_vitales.temperatura
     ? v.signos_vitales.temperatura / 10
     : -1;
-  console.log(temp);
   if (temp === -1) {
     dataTemp[0].value++;
   } else if (temp >= 36 && temp <= 37) {

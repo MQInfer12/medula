@@ -1,11 +1,6 @@
-import {
-  PolarAngleAxis,
-  PolarGrid,
-  PolarRadiusAxis,
-  Radar,
-  RadarChart,
-  Tooltip,
-} from "recharts";
+import { ApexOptions } from "apexcharts";
+import { memo } from "react";
+import ReactApexChart from "react-apexcharts";
 
 export interface RadarChartData {
   name: string;
@@ -14,31 +9,40 @@ export interface RadarChartData {
 
 interface Props {
   title: string;
-  max: number;
   data: RadarChartData[];
   type: string;
 }
 
-const RadarGraph = ({ title, max, data: dataProp, type }: Props) => {
-  const data = dataProp.map((v) => ({ ...v, fullMark: max }));
+const RadarGraph = memo(({ title, data, type }: Props) => {
+  const COLORS = ["#7768ae", "#e15554", "#e1bc29", "#3bb273", "#009ee3"];
+
+  const options: ApexOptions = {
+    colors: COLORS,
+    legend: {
+      show: false,
+    },
+    xaxis: {
+      categories: data.map((v) => v.name),
+    },
+  };
+
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center gap-2">
       <p className="font-bold text-black/70">{title}</p>
-      <RadarChart outerRadius={90} width={360} height={240} data={data}>
-        <PolarGrid />
-        <PolarAngleAxis dataKey="name" />
-        <PolarRadiusAxis angle={18} domain={[0, max]} />
-        <Tooltip />
-        <Radar
-          name={type}
-          dataKey="value"
-          stroke="#e15554"
-          fill="#e15554"
-          fillOpacity={0.6}
-        />
-      </RadarChart>
+      <ReactApexChart
+        options={options}
+        series={[
+          {
+            name: `Promedio (${type})`,
+            data: data.map((v) => v.value),
+          },
+        ]}
+        type="radar"
+        height={300}
+        width={400}
+      />
     </div>
   );
-};
+});
 
 export default RadarGraph;

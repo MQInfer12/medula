@@ -1,7 +1,7 @@
 import Data from "../mock/mock.json";
 import { edad } from "./edad";
 
-interface Heatmap {
+export interface HeatmapData {
   name: string;
   data: Axis[];
 }
@@ -113,7 +113,7 @@ const filterData = (range: Range, type: HeatmapType) => {
       filteredKeys[key] = value;
     }
   }
-  const data = Object.keys(filteredKeys).map<Heatmap>((v) => {
+  const data = Object.keys(filteredKeys).map<HeatmapData>((v) => {
     const { key, unit, max, min } = keys[v];
     return {
       name: `${v} (${min}${unit} - ${max}${unit})`,
@@ -139,7 +139,9 @@ const filterData = (range: Range, type: HeatmapType) => {
               break;
           }
           if (valueInRange) {
-            const existing = obj.find((e) => e.x === String(edad));
+            const existing = obj.find(
+              (e) => e.x.replace(" años", "") === String(edad)
+            );
             if (existing) {
               existing.y++;
             }

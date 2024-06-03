@@ -1,16 +1,14 @@
 import { HeatmapType, Range } from "../../data/heatmap";
-import { useDeferredValue, useState } from "react";
 import Heatmap from "../charts/heatmap";
+import { useDataContext } from "../../context/dataContext";
 
 interface Props {
   active: boolean;
 }
 
 const Page7 = ({ active }: Props) => {
-  const [range, setRange] = useState<Range>("normal");
-  const [type, setType] = useState<HeatmapType>("quimicas");
-  const deferredRange = useDeferredValue(range);
-  const deferredType = useDeferredValue(type);
+  const { setRange, setType, type, range } = useDataContext();
+  const { data_heatmap } = useDataContext();
 
   return (
     <section className="h-full flex flex-col items-center justify-center gap-8">
@@ -42,7 +40,7 @@ const Page7 = ({ active }: Props) => {
       </div>
       <div className="h-[60%] flex gap-6">
         <div className="h-full w-[1000px] bg-third-light/40 border border-third rounded-2xl p-4">
-          {active && <Heatmap type={deferredType} range={deferredRange} />}
+          {active && <Heatmap type={type} data={data_heatmap} />}
         </div>
       </div>
     </section>

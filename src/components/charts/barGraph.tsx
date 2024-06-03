@@ -1,4 +1,6 @@
-import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from "recharts";
+import { ApexOptions } from "apexcharts";
+import { memo } from "react";
+import ReactApexChart from "react-apexcharts";
 
 export type BarChartData = Record<string, number>;
 
@@ -7,32 +9,48 @@ interface Props {
   data: BarChartData;
 }
 
-const BarGraph = ({ title, data: dataProp }: Props) => {
+const BarGraph = memo(({ title, data }: Props) => {
   const COLORS = ["#7768ae", "#e15554", "#e1bc29", "#3bb273", "#d64dc4"];
 
-  const data = [
-    {
-      name: title,
-      ...dataProp,
+  const options: ApexOptions = {
+    colors: COLORS,
+    plotOptions: {
+      bar: {
+        borderRadius: 4,
+        borderRadiusApplication: "end",
+        horizontal: true,
+        distributed: true,
+      },
     },
-  ];
+    labels: Object.keys(data),
+    dataLabels: {
+      enabled: true,
+    },
+    legend: {
+      show: false,
+    },
+    xaxis: {
+      categories: Object.keys(data),
+    },
+  };
 
   return (
     <div className="flex flex-col items-center">
       <p className="font-bold text-black/70">{title}</p>
-      <BarChart width={600} height={200} data={data}>
-        <CartesianGrid />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        {Object.keys(data[0])
-          .filter((v) => v !== "name")
-          .map((key, i) => (
-            <Bar dataKey={key} fill={COLORS[i % COLORS.length]} />
-          ))}
-      </BarChart>
+      <ReactApexChart
+        type="bar"
+        options={options}
+        series={[
+          {
+            data: Object.values(data),
+            name: "Cantidad",
+          },
+        ]}
+        height={200}
+        width={600}
+      />
     </div>
   );
-};
+});
 
 export default BarGraph;

@@ -12,23 +12,6 @@ const generosData: BarChartData = Data.reduce<BarChartData>((obj, value) => {
   return obj;
 }, {});
 
-/* const generosDataPie: PieChartData[] = Data.reduce<PieChartData[]>(
-  (obj, value) => {
-    const val = value.sexo || "Sin especificar";
-    const exist = obj.find((e) => e.name === val);
-    if (!exist) {
-      obj.push({
-        name: val,
-        value: 1,
-      });
-    } else {
-      exist.value++;
-    }
-    return obj;
-  },
-  []
-); */
-
 const electrocardiogramaData: BarChartData = Data.reduce<BarChartData>(
   (obj, value) => {
     const val =

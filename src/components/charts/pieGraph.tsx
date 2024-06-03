@@ -1,4 +1,6 @@
-import { Cell, Pie, PieChart, Tooltip } from "recharts";
+import { ApexOptions } from "apexcharts";
+import { memo } from "react";
+import ReactApexChart from "react-apexcharts";
 
 export interface PieChartData {
   name: string;
@@ -10,29 +12,29 @@ interface Props {
   title: string;
 }
 
-const PieGraph = ({ data, title }: Props) => {
+const PieGraph = memo(({ data, title }: Props) => {
   const COLORS = ["#7768ae", "#e15554", "#e1bc29", "#3bb273", "#009ee3"];
+
+  const options: ApexOptions = {
+    colors: COLORS,
+    labels: data.map((v) => v.name),
+    legend: {
+      show: false,
+    },
+  };
 
   return (
     <div className="flex flex-col items-center">
       <p className="font-bold text-black/70">{title}</p>
-      <PieChart width={200} height={200}>
-        <Pie
-          data={data}
-          dataKey="value"
-          nameKey="name"
-          innerRadius={40}
-          outerRadius={85}
-          fill="#82ca9d"
-        >
-          {data.map((_, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-          ))}
-        </Pie>
-        <Tooltip />
-      </PieChart>
+      <ReactApexChart
+        type="donut"
+        series={data.map((v) => v.value)}
+        width={200}
+        height={200}
+        options={options}
+      />
     </div>
   );
-};
+});
 
 export default PieGraph;

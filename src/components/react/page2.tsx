@@ -14,7 +14,7 @@ const Page2 = () => {
           <h2 className="bg-bg font-extrabold inline p-4 text-5xl text-second leading-normal">
             Nuestro enfoque en la importancia de la salud
           </h2>
-          <p className="bg-bg w-3/4 px-4 py-4 leading-8">
+          <p className="bg-bg w-3/4 px-4 py-4 leading-loose text-black/65 font-bold">
             Reconocemos que la salud es el activo más valioso de cualquier
             individuo y organización, y es por eso que nos dedicamos a
             profundizar en su comprensión y promoción. Desde la prevención hasta

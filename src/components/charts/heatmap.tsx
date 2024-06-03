@@ -1,16 +1,14 @@
-import { useMemo } from "react";
-import { HeatmapType, Range, heatmap } from "../../data/heatmap";
+import { HeatmapData, HeatmapType } from "../../data/heatmap";
 import ReactApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
+import { memo } from "react";
 
 interface Props {
-  range: Range;
   type: HeatmapType;
+  data: HeatmapData[];
 }
 
-const Heatmap = ({ range, type }: Props) => {
-  const data = useMemo(() => heatmap(range, type), [range, type]);
-
+const Heatmap = memo(({ type, data }: Props) => {
   const options: ApexOptions = {
     dataLabels: {
       enabled: false,
@@ -27,6 +25,6 @@ const Heatmap = ({ range, type }: Props) => {
       series={data}
     />
   );
-};
+});
 
 export default Heatmap;
