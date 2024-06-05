@@ -13,8 +13,8 @@ interface Props {
   bg?: "first" | "second" | "third" | "fourth";
 }
 
-const CartesianGraph = memo(({ data, title, bg = "first" }: Props) => {
-  let styles = "";
+const CartesianGraph = memo(({ data, title, /* bg = "first" */ }: Props) => {
+  /* let styles = "";
   switch (bg) {
     case "first":
       styles = "bg-first-light/30 p-2 border border-first rounded-2xl";
@@ -28,7 +28,7 @@ const CartesianGraph = memo(({ data, title, bg = "first" }: Props) => {
     case "fourth":
       styles = "bg-fourth-light/30 p-2 border border-fourth rounded-2xl";
       break;
-  }
+  } */
 
   const options: ApexOptions = {
     chart: {

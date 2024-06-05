@@ -10,7 +10,7 @@ interface Props {
 }
 
 const BarGraph = memo(({ title, data }: Props) => {
-  const COLORS = ["#7768ae", "#e15554", "#e1bc29", "#3bb273", "#d64dc4"];
+  const COLORS = ["#7768ae", "#e15554", "#e1bc29", "#3bb273", "#009ee3"];
 
   const options: ApexOptions = {
     colors: COLORS,

@@ -27,6 +27,16 @@ export default {
           DEFAULT: "#009ee3",
         },
       },
+      keyframes: {
+        appearFromRight: {
+          "0%": {
+            transform: "translateX(100%)",
+          },
+          "100%": {
+            transform: "translateX(0)",
+          },
+        },
+      },
     },
   },
   plugins: [],

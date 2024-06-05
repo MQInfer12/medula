@@ -13,7 +13,7 @@ const Navbar = ({ open, setOpen, setPage }: Props) => {
   };
 
   return (
-    <header className="h-24 flex items-center justify-between relative z-20">
+    <header className="h-24 flex items-center justify-between relative z-20 isolate">
       <div className="h-full flex items-center gap-4 pl-10">
         <img
           className="h-[70%] w-auto"

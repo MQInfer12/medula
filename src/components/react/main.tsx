@@ -1,9 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Page0 from "./page0";
 import Page1 from "./page1";
 import Page2 from "./page2";
@@ -19,6 +14,8 @@ import PageRender from "./pageRender";
 import { DataContextProvider } from "../../context/dataContext";
 import Dots from "../absolutes/dots";
 import Walls from "../absolutes/walls";
+import Map from "../absolutes/map";
+import ChatBtn from "../absolutes/chatBtn";
 
 export interface ScrollPage {
   component: JSX.Element;
@@ -157,6 +154,10 @@ const Main = () => {
         </button>
 
         <Dots page={page} />
+
+        <Map page={page} />
+
+        <ChatBtn />
       </main>
     </DataContextProvider>
   );
