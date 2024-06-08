@@ -33,8 +33,6 @@ const Map = ({ page }: Props) => {
     };
   }, []);
 
-  console.log(city);
-
   const handleMouseEnter = () => {
     if (viewRef.current) {
       viewRef.current.goTo({ zoom: 4, duration: 300 });
@@ -58,7 +56,9 @@ const Map = ({ page }: Props) => {
       onMouseLeave={handleMouseLeave}
     >
       <div className="w-full h-full relative">
-        <small className="absolute text-white top-0 right-0 z-50 bg-fifth px-4 text-sm rounded-bl-lg">{city}</small>
+        <small className="absolute text-white top-0 right-0 z-50 bg-fifth px-4 text-sm rounded-bl-lg">
+          {city}
+        </small>
         <div ref={elementRef} id="map" className="w-full h-full" />
       </div>
     </div>

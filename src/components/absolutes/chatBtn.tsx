@@ -1,8 +1,8 @@
-import { useRef, useState } from "react";
 import { twMerge } from "../../utils/twMerge";
 import IconChat from "../icons/iconChat";
 import Overlay from "../react/overlay";
 import Chat from "../react/chat";
+import { useChatContext } from "../../context/chatContext";
 
 export interface IChat {
   me: boolean;
@@ -10,24 +10,7 @@ export interface IChat {
 }
 
 const ChatBtn = () => {
-  const [open, setOpen] = useState(false);
-  const [msg, setMsg] = useState("");
-  const [chat, setChat] = useState<IChat[]>([]);
-  const [loadingChat, setLoadingChat] = useState(false);
-  const runned = useRef(false);
-
-  const newMessage = (msg: string) => {
-    runned.current = false;
-    setOpen(true);
-    setChat((old) => [
-      ...old,
-      {
-        me: true,
-        content: msg.trim(),
-      },
-    ]);
-    setLoadingChat(true);
-  };
+  const { setOpen, open } = useChatContext();
 
   return (
     <>
@@ -47,17 +30,7 @@ const ChatBtn = () => {
           open: open,
         }}
       >
-        <Chat
-          chat={chat}
-          close={() => setOpen(false)}
-          loadingChat={loadingChat}
-          msg={msg}
-          setLoadingChat={setLoadingChat}
-          setMsg={setMsg}
-          newMessage={newMessage}
-          setChat={setChat}
-          runned={runned}
-        />
+        <Chat close={() => setOpen(false)} />
       </Overlay>
     </>
   );

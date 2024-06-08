@@ -1,32 +1,26 @@
-import React, { ElementRef, MutableRefObject, useEffect, useRef } from "react";
-import { IChat } from "../absolutes/chatBtn";
-import { twMerge } from "../../utils/twMerge";
+import React, { ElementRef, useEffect, useRef } from "react";
 import { api_getAIResponse } from "../../services/AIResponse";
 import Chatbot from "../icons/monitos/chatbot";
+import { useCityContext } from "../../context/cityContext";
+import { useChatContext } from "../../context/chatContext";
+import Message from "./message";
 
 interface Props {
-  chat: IChat[];
-  setChat: React.Dispatch<React.SetStateAction<IChat[]>>;
   close: () => void;
-  msg: string;
-  setMsg: React.Dispatch<React.SetStateAction<string>>;
-  loadingChat: boolean;
-  setLoadingChat: React.Dispatch<React.SetStateAction<boolean>>;
-  newMessage: (msg: string) => void;
-  runned: MutableRefObject<boolean>;
 }
 
-const Chat = ({
-  chat,
-  close,
-  msg,
-  setMsg,
-  loadingChat,
-  setLoadingChat,
-  newMessage,
-  setChat,
-  runned,
-}: Props) => {
+const Chat = ({ close }: Props) => {
+  const {
+    chat,
+    msg,
+    setMsg,
+    loadingChat,
+    setLoadingChat,
+    newMessage,
+    setChat,
+    runned,
+  } = useChatContext();
+  const { city } = useCityContext();
   const chatRef = useRef<ElementRef<"div">>(null);
 
   const handleSend = async (
@@ -40,7 +34,7 @@ const Chat = ({
 
   useEffect(() => {
     const getResponse = async () => {
-      await api_getAIResponse(chat, (res) => {
+      await api_getAIResponse(chat, city, (res) => {
         setChat((old) => {
           const lastIndex = old.length - 1;
           const lastMessage = old[lastIndex];
@@ -103,24 +97,7 @@ const Chat = ({
       >
         {chat.length > 0 ? (
           chat.map((message, i) => (
-            <div
-              key={i}
-              className={twMerge(
-                "w-[600px] max-w-full flex",
-                message.me ? "self-end justify-end" : "self-start justify-start"
-              )}
-            >
-              <p
-                className={twMerge(
-                  "font-bold text-white p-2 px-4 text-sm rounded-b-lg leading-relaxed w-fit animate-[appear_.3s] whitespace-pre-line",
-                  message.me
-                    ? "bg-first/60 rounded-tl-lg text-end"
-                    : "bg-second/60 rounded-tr-lg text-start"
-                )}
-              >
-                {message.content}
-              </p>
-            </div>
+            <Message key={i} me={message.me} message={message.content} />
           ))
         ) : (
           <div className="h-full w-full flex flex-col gap-10 items-center justify-center">

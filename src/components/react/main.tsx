@@ -16,6 +16,7 @@ import Dots from "../absolutes/dots";
 import Walls from "../absolutes/walls";
 import Map from "../absolutes/map";
 import ChatBtn from "../absolutes/chatBtn";
+import { ChatContextProvider } from "../../context/chatContext";
 
 export interface ScrollPage {
   component: JSX.Element;
@@ -76,7 +77,6 @@ const Main = () => {
 
   const handleWheel = useCallback(
     (event: any) => {
-      console.log("handling wheel");
       if (!scrolling) {
         setScrolling(true);
         if (event.deltaY > 0) {
@@ -98,67 +98,71 @@ const Main = () => {
 
   return (
     <DataContextProvider>
-      <Navbar open={open} setOpen={setOpen} setPage={setPage} />
-      <main
-        className="flex-1 overflow-hidden relative isolate"
-        onWheel={handleWheel}
-      >
-        {pages.map((p, i) => (
-          <PageRender key={i} index={i} page={p} pageIndex={page} />
-        ))}
-
-        <Walls page={page} />
-
-        {/* PROGRESS BAR */}
-        <div
-          className={`w-full absolute z-10 h-1 bg-black/5 top-0 ${
-            open ? "max-md:top-10" : "max-md:top-0"
-          }`}
+      <ChatContextProvider>
+        <Navbar open={open} setOpen={setOpen} setPage={setPage} />
+        <main
+          className="flex-1 overflow-hidden relative isolate"
+          onWheel={handleWheel}
         >
+          {pages.map((p, i) => (
+            <PageRender key={i} index={i} page={p} pageIndex={page} />
+          ))}
+
+          <Walls page={page} />
+
+          {/* PROGRESS BAR */}
           <div
-            className="bg-second h-full transition-all duration-500"
+            className={`w-full absolute z-10 h-1 bg-black/5 top-0 ${
+              open ? "max-md:top-10" : "max-md:top-0"
+            }`}
+          >
+            <div
+              className="bg-second h-full transition-all duration-500"
+              style={{
+                width: `${(page / total) * 100}%`,
+              }}
+            ></div>
+          </div>
+
+          {/* BUTTON UP */}
+          <button
+            className="absolute top-5 left-1/2 -translate-x-1/2 px-10 bg-black/5 rounded-full transition-all duration-500"
+            onClick={() => setPage((oldPage) => Math.max(oldPage - 2, 0))}
             style={{
-              width: `${(page / total) * 100}%`,
+              opacity: page !== 0 ? "1" : "0",
+              pointerEvents: page !== 0 ? "auto" : "none",
             }}
-          ></div>
-        </div>
+          >
+            <div className="w-6 text-second">
+              <IconChevron />
+            </div>
+          </button>
 
-        {/* BUTTON UP */}
-        <button
-          className="absolute top-5 left-1/2 -translate-x-1/2 px-10 bg-black/5 rounded-full transition-all duration-500"
-          onClick={() => setPage((oldPage) => Math.max(oldPage - 2, 0))}
-          style={{
-            opacity: page !== 0 ? "1" : "0",
-            pointerEvents: page !== 0 ? "auto" : "none",
-          }}
-        >
-          <div className="w-6 text-second">
-            <IconChevron />
-          </div>
-        </button>
+          {/* BUTTON DOWN */}
+          <button
+            className="absolute bottom-5 left-1/2 -translate-x-1/2 px-10 bg-black/5 rounded-full transition-all duration-500"
+            onClick={() =>
+              setPage((oldPage) =>
+                Math.min(oldPage + 2, (pages.length - 1) * 2)
+              )
+            }
+            style={{
+              opacity: page !== (pages.length - 1) * 2 ? "1" : "0",
+              pointerEvents: page !== (pages.length - 1) * 2 ? "auto" : "none",
+            }}
+          >
+            <div className="w-6 text-second rotate-180">
+              <IconChevron />
+            </div>
+          </button>
 
-        {/* BUTTON DOWN */}
-        <button
-          className="absolute bottom-5 left-1/2 -translate-x-1/2 px-10 bg-black/5 rounded-full transition-all duration-500"
-          onClick={() =>
-            setPage((oldPage) => Math.min(oldPage + 2, (pages.length - 1) * 2))
-          }
-          style={{
-            opacity: page !== (pages.length - 1) * 2 ? "1" : "0",
-            pointerEvents: page !== (pages.length - 1) * 2 ? "auto" : "none",
-          }}
-        >
-          <div className="w-6 text-second rotate-180">
-            <IconChevron />
-          </div>
-        </button>
+          <Dots page={page} />
 
-        <Dots page={page} />
+          <Map page={page} />
 
-        <Map page={page} />
-
-        <ChatBtn />
-      </main>
+          <ChatBtn />
+        </main>
+      </ChatContextProvider>
     </DataContextProvider>
   );
 };

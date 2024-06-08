@@ -64,16 +64,16 @@ export interface Electrocardiograma {
 
 export interface Pap {
   celulas_observadas: CelulasObservadas;
-  calidad_de_muestra: string;
-  clasificacion_general: string;
-  resultados: string;
-  flora: string;
+  calidad_de_muestra: string | null;
+  clasificacion_general: string | null;
+  resultados: string | null;
+  flora: string | null;
 }
 
 export interface CelulasObservadas {
-  escamosas: string;
-  glandulares: string;
-  metaplasia: string;
+  escamosas: string | null;
+  glandulares: string | null;
+  metaplasia: string | null;
 }
 
 export interface Hemograma {

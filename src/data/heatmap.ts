@@ -1,4 +1,4 @@
-import Data from "../mock/mock.json";
+import { DataType } from "../types/dataType";
 import { edad } from "./edad";
 
 export interface HeatmapData {
@@ -105,7 +105,7 @@ const keys: Keys = {
   },
 };
 
-const filterData = (range: Range, type: HeatmapType) => {
+const filterData = (range: Range, type: HeatmapType, dataFiltered: DataType[]) => {
   const filteredKeys: Keys = {};
   for (const key in keys) {
     const value = keys[key];
@@ -117,7 +117,7 @@ const filterData = (range: Range, type: HeatmapType) => {
     const { key, unit, max, min } = keys[v];
     return {
       name: `${v} (${min}${unit} - ${max}${unit})`,
-      data: Data.reduce<Axis[]>(
+      data: dataFiltered.reduce<Axis[]>(
         (obj, value) => {
           const edad = value.edad;
           const val =
@@ -149,7 +149,7 @@ const filterData = (range: Range, type: HeatmapType) => {
           /* obj.sort((a, b) => Number(a.x) - Number(b.x)); */
           return obj;
         },
-        edad.map((e) => ({
+        edad(dataFiltered).map((e) => ({
           x: e.name,
           y: 0,
         }))

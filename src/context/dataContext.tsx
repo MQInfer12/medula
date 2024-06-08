@@ -16,6 +16,7 @@ import { BarChartData } from "../components/charts/barGraph";
 import { hemogramaPerc } from "../data/hemograma";
 import { RadarChartData } from "../components/charts/radarChart";
 import { HeatmapData, HeatmapType, Range, heatmap } from "../data/heatmap";
+import { useCityContext } from "./cityContext";
 
 interface Ctx {
   range: Range;
@@ -45,22 +46,32 @@ interface Props {
 }
 
 export const DataContextProvider = ({ children }: Props) => {
+  const { data } = useCityContext();
   const [range, setRange] = useState<Range>("normal");
   const [type, setType] = useState<HeatmapType>("quimicas");
 
-  const data_edad = useMemo(() => edad, []);
-  const data_talla = useMemo(() => talla, []);
-  const data_peso = useMemo(() => peso, []);
-  const data_generos = useMemo(() => generos, []);
-  const data_temperatura = useMemo(() => temperatura, []);
-  const data_saturacion = useMemo(() => saturacion, []);
-  const data_fuma = useMemo(() => fuma, []);
-  const data_covid = useMemo(() => covid, []);
-  const data_bebidas_alcoholicas = useMemo(() => bebidas_alcoholicas, []);
-  const data_deporte = useMemo(() => deporte, []);
-  const data_electrocardiograma = useMemo(() => electrocardiograma, []);
-  const data_hemogramaperc = useMemo(() => hemogramaPerc, []);
-  const data_heatmap = useMemo(() => heatmap(range, type), [range, type]);
+  const data_edad = useMemo(() => edad(data), [data]);
+  const data_talla = useMemo(() => talla(data), [data]);
+  const data_peso = useMemo(() => peso(data), [data]);
+  const data_generos = useMemo(() => generos(data), [data]);
+  const data_temperatura = useMemo(() => temperatura(data), [data]);
+  const data_saturacion = useMemo(() => saturacion(data), [data]);
+  const data_fuma = useMemo(() => fuma(data), [data]);
+  const data_covid = useMemo(() => covid(data), [data]);
+  const data_bebidas_alcoholicas = useMemo(
+    () => bebidas_alcoholicas(data),
+    [data]
+  );
+  const data_deporte = useMemo(() => deporte(data), [data]);
+  const data_electrocardiograma = useMemo(
+    () => electrocardiograma(data),
+    [data]
+  );
+  const data_hemogramaperc = useMemo(() => hemogramaPerc(data), [data]);
+  const data_heatmap = useMemo(
+    () => heatmap(range, type, data),
+    [range, type, data]
+  );
 
   return (
     <DataContext.Provider
