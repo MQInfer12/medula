@@ -1,21 +1,25 @@
 import type { RadarChartData } from "../components/charts/radarChart";
 import { DataType } from "../types/dataType";
 
-const generosDataPie = (data: DataType[]) =>
-  data
+const generosDataPie = (data: DataType[]) => {
+  let counter = 0;
+  const result = data
     .reduce<RadarChartData[]>(
       (obj, value) => {
-        const h = value.diagnosticos.hemograma.hematocito;
-        const n = value.diagnosticos.hemograma.neutrofilos_segmentados;
-        const e = value.diagnosticos.hemograma.eosinofilos;
-        const l = value.diagnosticos.hemograma.linfositos;
-        const m = value.diagnosticos.hemograma.monocitos;
+        const h = value.diagnosticos.hemograma.hematocito.value;
+        const n = value.diagnosticos.hemograma.neutrofilos_segmentados.value;
+        const e = value.diagnosticos.hemograma.eosinofilos.value;
+        const l = value.diagnosticos.hemograma.linfositos.value;
+        const m = value.diagnosticos.hemograma.monocitos.value;
 
-        obj[0].value += h;
-        obj[1].value += n;
-        obj[2].value += e;
-        obj[3].value += l;
-        obj[4].value += m;
+        if (h && n && e && l && m) {
+          counter++;
+          obj[0].value += h;
+          obj[1].value += n;
+          obj[2].value += e;
+          obj[3].value += l;
+          obj[4].value += m;
+        }
 
         return obj;
       },
@@ -42,6 +46,8 @@ const generosDataPie = (data: DataType[]) =>
         },
       ]
     )
-    .map((v) => ({ ...v, value: v.value / data.length }));
+    .map((v) => ({ ...v, value: v.value / counter }));
+  return result;
+};
 
 export const hemogramaPerc = generosDataPie;

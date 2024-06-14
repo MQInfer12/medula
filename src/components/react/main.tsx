@@ -17,6 +17,7 @@ import Walls from "../absolutes/walls";
 import Map from "../absolutes/map";
 import ChatBtn from "../absolutes/chatBtn";
 import { ChatContextProvider } from "../../context/chatContext";
+import { CityContextProvider } from "../../context/cityContext";
 
 export interface ScrollPage {
   component: JSX.Element;
@@ -97,16 +98,19 @@ const Main = () => {
   const total = useMemo(() => (pages.length - 1) * 2, [pages]);
 
   return (
-    <DataContextProvider>
-      <ChatContextProvider>
+    <CityContextProvider>
+      <DataContextProvider>
         <Navbar open={open} setOpen={setOpen} setPage={setPage} />
         <main
           className="flex-1 overflow-hidden relative isolate"
           onWheel={handleWheel}
         >
-          {pages.map((p, i) => (
-            <PageRender key={i} index={i} page={p} pageIndex={page} />
-          ))}
+          <ChatContextProvider>
+            {pages.map((p, i) => (
+              <PageRender key={i} index={i} page={p} pageIndex={page} />
+            ))}
+            <ChatBtn />
+          </ChatContextProvider>
 
           <Walls page={page} />
 
@@ -159,11 +163,9 @@ const Main = () => {
           <Dots page={page} />
 
           <Map page={page} />
-
-          <ChatBtn />
         </main>
-      </ChatContextProvider>
-    </DataContextProvider>
+      </DataContextProvider>
+    </CityContextProvider>
   );
 };
 

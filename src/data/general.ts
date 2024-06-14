@@ -4,6 +4,10 @@ import { DataType } from "../types/dataType";
 export const edad = (data: DataType[]) => {
   const dataAge: PieChartData[] = [
     {
+      name: "No especificado",
+      value: 0,
+    },
+    {
       name: "20-30",
       value: 0,
     },
@@ -27,16 +31,18 @@ export const edad = (data: DataType[]) => {
 
   data.forEach((v) => {
     const edad = v.edad;
-    if (edad >= 20 && edad <= 30) {
+    if (edad === null) {
       dataAge[0].value++;
-    } else if (edad >= 31 && edad <= 40) {
+    } else if (edad >= 20 && edad <= 30) {
       dataAge[1].value++;
-    } else if (edad >= 41 && edad <= 50) {
+    } else if (edad >= 31 && edad <= 40) {
       dataAge[2].value++;
-    } else if (edad >= 51 && edad <= 60) {
+    } else if (edad >= 41 && edad <= 50) {
       dataAge[3].value++;
-    } else {
+    } else if (edad >= 51 && edad <= 60) {
       dataAge[4].value++;
+    } else {
+      dataAge[5].value++;
     }
   });
 
@@ -180,9 +186,7 @@ export const temperatura = (data: DataType[]) => {
   ];
 
   data.forEach((v) => {
-    const temp = v.signos_vitales.temperatura
-      ? v.signos_vitales.temperatura / 10
-      : -1;
+    const temp = v.signos_vitales.temperatura || -1;
     if (temp === -1) {
       dataTemp[0].value++;
     } else if (temp >= 36 && temp <= 37) {

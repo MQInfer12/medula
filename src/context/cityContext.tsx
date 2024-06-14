@@ -15,9 +15,11 @@ interface Props {
 }
 
 export const CityContextProvider = ({ children }: Props) => {
+  const jsonData = Data as DataType[];
+
   const [city, setCity] = useState("LA PAZ");
   const data: DataType[] = useMemo(
-    () => Data.filter((v) => v.ciudad === city),
+    () => jsonData.filter((v) => v.ciudad?.trim() === city),
     [city]
   );
 
