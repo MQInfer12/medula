@@ -17,6 +17,7 @@ import { hemogramaPerc } from "../data/hemograma";
 import { RadarChartData } from "../components/charts/radarChart";
 import { HeatmapData, HeatmapType, Range, heatmap } from "../data/heatmap";
 import { useCityContext } from "./cityContext";
+import { diabetes } from "../data/diseases/diabetes";
 
 interface Ctx {
   range: Range;
@@ -37,6 +38,9 @@ interface Ctx {
   data_electrocardiograma: BarChartData;
   data_hemogramaperc: RadarChartData[];
   data_heatmap: HeatmapData[];
+
+  //* DIAGNOSTICOS DE ENFERMEDADES
+  data_diabetes: number;
 }
 
 const DataContext = createContext<Ctx | null>(null);
@@ -73,6 +77,9 @@ export const DataContextProvider = ({ children }: Props) => {
     [range, type, data]
   );
 
+  //* DIAGNOSTICOS DE ENFERMEDADES
+  const data_diabetes = useMemo(() => diabetes(data), [data]);
+
   return (
     <DataContext.Provider
       value={{
@@ -93,6 +100,8 @@ export const DataContextProvider = ({ children }: Props) => {
         data_electrocardiograma,
         data_hemogramaperc,
         data_heatmap,
+        //* DIAGNOSTICOS DE ENFERMEDADES
+        data_diabetes,
       }}
     >
       {children}
